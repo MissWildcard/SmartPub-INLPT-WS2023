@@ -10,13 +10,23 @@ Current overall plan:
 ## Questions:
 
 1. Data
-- what kind of embeddings do we want to use?
-- do we want to store embedded or text documents?
-- what data do we store? (Metadata, Formatting)
+  - what kind of embeddings do we want to use?
+  - do we want to store embedded or text documents?
+  - what data do we store? (Metadata, Formatting)
 
 2. Model
-- are there requirements concerning extractive/generative answer generation?
-- what kind of pre-trained models can we use?
+  - are there requirements concerning extractive/generative answer generation?
+  - what kind of pre-trained models can we use?
+
+## Possible Implementation
+
+- OpenSearch Environment
+  - Docker
+  - VS-Code
+
+- Document Retrieval
+  - keywords (tf-idf)
+  - k-Nearest Neighbours
 
 ## Long term goals:
 - add context/'proof' to answers
