@@ -4,7 +4,7 @@ We plan on using the medical dataset, comprised of abstracts from articles on Pu
 
 Current overall plan:
 - use OpenSearch to store/manage the dataset
-- perform Document Retrieval on the dataset given the query
+- perform Document Retrieval on the dataset given the query (use OpenSearch tools/API)
 - use extractive answer generation on the retrieved documents
 
 ## Questions:
