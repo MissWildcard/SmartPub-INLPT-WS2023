@@ -1,6 +1,6 @@
 # SmartPub-INLPT-WS2023
 
-We plan on using the medical dataset, comprised of abstracts from articles on PubMed concerning “intelligence” from 2013 till 2023 [Link to PubMed](Abstracts concerning “intelligence” from 2013 till 2023).
+We plan on using the medical dataset, comprised of abstracts from articles on PubMed concerning “intelligence” from 2013 till 2023 [Link to PubMed](https://pubmed.ncbi.nlm.nih.gov/?term=intelligence+%5BTitle%2Fabstract%5D&filter=simsearch1.fha&filter=years.2014-2024&sort=date).
 
 Current overall plan:
 - use OpenSearch to store/manage the dataset
