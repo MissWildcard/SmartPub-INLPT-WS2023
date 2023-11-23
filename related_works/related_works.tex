@@ -1,0 +1,112 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+%% Welcome to Overleaf!
+%% If this is your first time using LaTeX, it might be worth going through this brief presentation:
+%% https://www.overleaf.com/latex/learn/free-online-introduction-to-latex-part-1
+
+%% Researchers have been using LaTeX for decades to typeset their papers, producing beautiful, crisp documents in the process. By learning LaTeX, you are effectively following in their footsteps, and learning a highly valuable skill!
+
+%% The \usepackage commands below can be thought of as analogous to importing libraries into Python, for instance. We've pre-formatted this for you, so you can skip right ahead to the title below.
+
+%% Language and font encodings
+\usepackage[spanish,english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{hyperref}
+\usepackage{natbib}
+\bibliographystyle{unsrtnat}
+
+%% Title
+\title{
+	%\vspace{-1in} 	
+	\usefont{OT1}{bch}{b}{n}
+	\normalfont \normalsize \textsc{Natural Language Processing with Transformers WS 23/24} \\ [10pt]
+	\huge Related Works - Question Answering Systems \\
+}
+
+\usepackage{authblk}
+
+\author[2]{Blanca Birn}
+\author[1]{Maria Mathews}
+\author[1]{Mani Smaran Nair}
+\author[2]{Dang Hoang Dung Nguyen}
+
+\affil[1]{\small{Institute for Data and Computer Science, University of Heidelberg}}
+\affil[2]{Institute for Computational Linguistics, University of Heidelberg}
+
+
+\begin{document}
+	\maketitle
+	
+	\selectlanguage{english}
+	\begin{abstract}
+		This document is to compile the research into related works done during this project. The project itself is about designing and building a medical domain Question Answering (QA) system.
+	\end{abstract} \\ 
+	\\ 
+	
+	\section{Introduction}
+		
+	
+	\section{Dataset (Compilation, Storage, Access)}
+	
+	\section{Document Retrieval}
+	
+	Document Retrieval (DR) aims to retrieve a small number of relevant document from the dataset. These documents should contain the information to correctly answer the question posed to the model. This reduces the amount of irrelevant information the answer extraction model has to consider and as such aims to make the extraction more accurate and more efficient. Popular models will be discussed in this section. THere is a distinction in the taxonomy of models between traditional and modern models. This will be mentioned in the sections. These methods however still retrieve many irrelevant documents that overwhelm AE systems and therefore require post-processing, e.g. document re-ranking, filtering and selection \cite{zhu2021retrieving}. These will be discussed later.\\
+		
+	\subsection{Vector Space Models/Dense Retriever} 
+	Vector Space Models are a traditional model where the text of both the query and the documents are translated into a multi-dimensional vector (embedding). The modern equivalent is dense retrievers, since the document is encoded into a (collection) of dense vectors. Relevant documents are determined by computing the similarity of the vectors and choosing those most similar. For this various metrics can be used - cosine similarity, euclidean  distance \citep{zhu2021retrieving} and k-NN. 
+	
+	Nowadays the embeddings (dense vectors) are obtained using a pre-trained transformer-based model, like BERT or GPT.
+	
+	\subsection{Probabilistic Models/Sparse Retriever}
+	
+	Probabilistic models traditionally use probabilistic characteristics such as term frequency and document length to determine relevant documents. One of the most empirically successful (and therefore widely used) retrieval methods Okapi BM25, as well as the popular Term Frequency - Inverse Document Frequency (tf-idf) fall into this category. These are called sparse because they project the document into a sparse vector \citep{zhu2021retrieving}. The most basic sparse vector approach is Bag-of-Words, on which both tf-idf and Okapi BM25 are based.
+	
+	\textbf{Advantages} Very computationally efficient and empirically proven to be accurate.
+	
+	\textbf{Disadvantages} Relies on exact term matching and therefore can't recognize e.g. synonyms, paraphrases and spelling errors. Although there are systems that aim to mitigate this e.g. ALIGNER \citep{qian2022multivector}.
+	
+	\subsection{(Deep) Language Models}
+	
+	These approaches use LMs to directly models the semantic representations of a document - query pair by utilizing fine-tuned pre-trained LMs like BERT. These can of course, based on the embeddings used also be classified as dense retrievers. \citep{khattab2020colbert}
+	
+	\textbf{Advantages} Very accurate and current SOTA.
+	
+	\textbf{Disadvantages} Very high computational cost as each document-query pair has to be encoded for every query \citep{khattab2020colbert}. I would say so much so, that it is not a viable approach for this project.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+%	{\scriptsize
+%		\begin{verbatim}
+%			\begin{figure}
+%				\centering
+%				\includegraphics[width=0.4\textwidth]{test.png}
+%				\caption{Hello!}
+%			\end{figure}
+%		\end{verbatim}
+%	}
+	
+	\section*{Conclusion}
+
+
+	
+	\bibliography{bibliography}
+	
+\end{document}
