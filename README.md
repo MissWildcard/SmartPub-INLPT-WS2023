@@ -18,6 +18,9 @@ Current overall plan:
   - are there requirements concerning extractive/generative answer generation?
   - what kind of pre-trained models can we use?
 
+## Related Works
+Our research to related works and general ideas can be found in this [Google Doc](https://docs.google.com/document/d/1m4kF7XVmnPf96O8Rb5n4UKLFJVD0xe2SMmiUjc5mVgk/edit?pli=1#heading=h.vpnyzzywsw32).
+
 ## Possible Implementation
 
 - OpenSearch Environment
