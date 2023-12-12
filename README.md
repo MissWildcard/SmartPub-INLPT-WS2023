@@ -11,7 +11,7 @@ Current overall plan:
 
 1. Data
   - **Dataset PubMed**: Abstracts of the articles published between the years 2013 to 2023 that contain the word “intelligence” in the abstract’s text 
-  - Apply algorithm from [PubMedQA dataset] (https://arxiv.org/abs/1909.06146#:~:text=The%20task%20of%20PubMedQA%20is,k%20artificially%20generated%20QA%20instances) to create synthetic QA data for our dataset
+  - Apply algorithm from [PubMedQA dataset](https://arxiv.org/abs/1909.06146#:~:text=The%20task%20of%20PubMedQA%20is,k%20artificially%20generated%20QA%20instances) to create synthetic QA data for our dataset
   - what data do we store? (Metadata, Formatting)
 
 2. Model
