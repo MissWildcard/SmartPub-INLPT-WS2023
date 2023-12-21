@@ -33,3 +33,20 @@ Our research to related works and general ideas can be found in this [Google Doc
 ## Long term goals:
 - add context/'proof' to answers
 - nice UI
+
+
+----------------------------------------------------Minutes of the meeting--------------------------------------------------------------------------------------
+----------------------------------------------------with John Ziegler--------------------------------------------------------------------------------------
+
+Dec-18-2023
+
+(S)Is there a minimum size for the dataset? Both dataset not very large, so use all of them.
+If using the entire dataset makes the system slow, use a smaller dataset.
+Extract keywords, other entities – should be incorporated in the model that you use.
+Now focus on data – once its ready focus on model.
+Split task among yourself – data extraction, the datamodel, setting up opensearch, ui etc
+(J)Any idea on datamodel?  T5, T0
+Metadata – keyword extraction, entities etc? 
+Really imp task – preprocessing, storing data in doc model (there must be one workinh on that). Use bm25 as statistical model for 
+Start simple and then go more advancedPM25 retreival should come first
+If you start complex and your system not working – it’ll be difficult to debug the issue. So start simple and then go complex.
