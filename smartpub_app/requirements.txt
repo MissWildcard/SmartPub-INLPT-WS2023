@@ -6,7 +6,7 @@ flask
 pypdf
 python-dotenv
 -e .
-ReFinED @ https://github.com/amazon-science/ReFinED/archive/refs/tags/V1.zip
+https://github.com/amazon-science/ReFinED/archive/refs/tags/V1.zip
 evaluate
 tqdm
 rouge_score
