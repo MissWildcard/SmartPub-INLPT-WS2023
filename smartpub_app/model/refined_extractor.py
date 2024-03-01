@@ -1,6 +1,6 @@
 """
 This contains the script for a simple off-the-shelf entity extractor, framework used here is ReFInED,
-an entity linking framework
+an entity linking framework https://github.com/alexa/refined
 
 """
 
