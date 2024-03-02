@@ -29,7 +29,6 @@ api_key,hf_auth = setup_pipeline()
 def index():
     return render_template('chat.html')
 
-print("")
 @app.route("/get", methods=["GET", "POST"])
 def chat():
     try:

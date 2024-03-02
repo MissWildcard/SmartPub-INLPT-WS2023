@@ -9,7 +9,13 @@ Clone the repository
 Project repo: https://github.com/
 ```
 
-### STEP 01- Create a conda environment after opening the repository
+### STEP 01- Navigate to the folder using the below command
+ 
+ ```bash
+cd smartpub_app
+```
+
+### STEP 02- Create a conda environment after opening the repository
 
 ```bash
 conda create -n smartpub python=3.8 -y
@@ -19,27 +25,12 @@ conda create -n smartpub python=3.8 -y
 conda activate smartpub
 ```
 
-### STEP 02- install the requirements
+### STEP 03- install the requirements
 ```bash
 pip install -r requirements.txt
 ```
 
 ### Download the quantized model from the link provided in model folder & keep the model in the model directory:
-
-```ini
-## Download the Llama 2 Model:
-
-llama-2-7b-chat.ggmlv3.q4_0.bin
-
-
-## From the following link:
-https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/tree/main
-```
-
-```bash
-# run the following command
-python store_index.py
-```
 
 ```bash
 # Finally run the following command
@@ -51,12 +42,4 @@ Now,
 open up localhost:
 ```
 
-
-### Techstack Used:
-
-- Python
-- LangChain
-- Flask
-- Meta Llama2
-- Pinecone
 
