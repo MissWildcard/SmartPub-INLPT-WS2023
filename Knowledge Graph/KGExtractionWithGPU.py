@@ -1,16 +1,29 @@
+''' Implementation to extract knowledge graph from the pubmed dataset.
+Knowlegde Graph is extracted in the form of triplets (entity, relation, entity)
+For this, we use Babelscape/rebel model from https://github.com/Babelscape/rebel '''
+
 import pandas as pd
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
 import nltk
 from nltk.tokenize import word_tokenize
 import torch
+import json
 
 #CHANGE THE YEAR TO THE SPECIFIC YEAR YOU NEED
-year=2013
+year=2014
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+#Name of output json file
+out_file1= f'ER_{year}.json'
+out_file2= f'ER_{year}_list.json'
+
 # Initialize the triplet extraction pipeline using Babelscape/rebel-large model
 triplet_extractor = pipeline('text2text-generation', model='Babelscape/rebel-large', tokenizer='Babelscape/rebel-large', device=device)
+
+# Load the tokenizer for the desired model
+tokenizer = AutoTokenizer.from_pretrained("Babelscape/rebel-large")
+max_token_length = tokenizer.model_max_length
 
 # Load the CSV file into a DataFrame
 df_all = pd.read_csv("AllData.csv")
@@ -18,12 +31,13 @@ df = df_all[df_all['Year'] == year]
 print("Count of rows in df:", len(df))
 
 # Function to process each row and generate triplets
-def process_row(row):
+def processRow(row, output_file1, output_file2):
     title = str(row['Title'])
     abstract = str(row['Abstract'])
     pmid = int(row['PMID'])  
     authors = row['Authors']
     date = f"{int(row['Month'])}-{int(row['Year'])}"
+    print(pmid)
     
     # Initialize dictionaries to store entity relation information
     title_entity_relation = {}
@@ -33,50 +47,55 @@ def process_row(row):
     if not title.strip():
         if abstract.strip():
             abstract_selected = abstract
-            abstract_entity_relation['pmid'] = pmid
-            abstract_entity_relation['triplets'] = genAbstractTextFromPipeline(abstract_selected)
-            abstract_entity_relation['authors'] = authors
-            abstract_entity_relation['year'] = date
-            return pd.Series([None, abstract_entity_relation])
+            triplets = genAbstractTextFromPipeline(abstract_selected)
+            writeTripletsToFile(triplets, pmid, authors, date, output_file1, output_file1)
     elif not abstract.strip():
         if title.strip():
             title_selected = title
-            title_entity_relation['pmid'] = pmid
-            title_entity_relation['triplets'] = genTitleTextFromPipeline(title_selected)
-            title_entity_relation['authors'] = authors
-            title_entity_relation['year'] = date
-            return pd.Series([title_entity_relation, None])
+            triplets = genTitleTextFromPipeline(title_selected)
+            writeTripletsToFile(triplets, pmid, authors, date, output_file1, output_file2)
     else:
         title_selected = title
         abstract_selected = abstract 
-        title_entity_relation['pmid'] = pmid
-        title_entity_relation['triplets'] = genTitleTextFromPipeline(title_selected)
-        title_entity_relation['authors'] = authors
-        title_entity_relation['year'] = date
-        
-        abstract_entity_relation['pmid'] = pmid
-        abstract_entity_relation['triplets'] = genAbstractTextFromPipeline(abstract_selected)
-        abstract_entity_relation['authors'] = authors
-        abstract_entity_relation['year'] = date
-        return pd.Series([title_entity_relation, abstract_entity_relation])
-    return None, None
+        triplets = genTitleTextFromPipeline(title_selected)
+        writeTripletsToFile(triplets, pmid, authors, date, output_file1, output_file2)
+        triplets = genAbstractTextFromPipeline(abstract_selected)
+        writeTripletsToFile(triplets, pmid, authors, date, output_file1, output_file2)
 
 
 def genAbstractTextFromPipeline(abs):
-    # Generate text using the triplet extraction pipeline
-    generated_abs_text = triplet_extractor(abs, return_tensors=True, return_text=False)
-    generated_abs_text_decoded = triplet_extractor.tokenizer.batch_decode([generated_abs_text[0]["generated_token_ids"]])[0]
-    # Extract triplets from the generated text
-    return extract_triplets(generated_abs_text_decoded)
+    # If abstract length exceeds the maximum token length, use sliding window approach for splitting
+    if len(abs) > max_token_length:
+        # Initialize an empty list to store the triplets
+        triplets_list = []
+        # Define the window size for sliding window approach
+        window_size = max_token_length
+        # Iterate over the input sequence with sliding window
+        for i in range(0, len(abs), window_size):
+            window_abs = abs[i:i+window_size]
+            # Generate text using the triplet extraction pipeline for the current window
+            generated_abs_text = triplet_extractor(window_abs, return_tensors=True, return_text=False)
+            generated_abs_text_decoded = triplet_extractor.tokenizer.batch_decode([generated_abs_text[0]["generated_token_ids"]])[0]
+            # Extract triplets from the generated text for the current window
+            triplets = extractTriplets(generated_abs_text_decoded)
+            # Append the triplets to the list
+            triplets_list.extend(triplets)
+        return triplets_list
+    else:
+        # Generate abstract text using the triplet extraction pipeline
+        generated_abs_text = triplet_extractor(abs, return_tensors=True, return_text=False)
+        generated_abs_text_decoded = triplet_extractor.tokenizer.batch_decode([generated_abs_text[0]["generated_token_ids"]])[0]
+        # Extract and return triplets from the generated text
+        return extractTriplets(generated_abs_text_decoded)
 
 def genTitleTextFromPipeline(title):
     # Generate text using the triplet extraction pipeline
     generated_title_text = triplet_extractor(title, return_tensors=True, return_text=False)
     generated_title_text_decoded = triplet_extractor.tokenizer.batch_decode([generated_title_text[0]["generated_token_ids"]])[0]
-    return extract_triplets(generated_title_text_decoded)
+    return extractTriplets(generated_title_text_decoded)
 
 # Function to parse the generated text and extract the triplets
-def extract_triplets(text):
+def extractTriplets(text):
     triplets = []
     relation, subject, object_ = '', '', ''
     current = 'x'
@@ -106,30 +125,33 @@ def extract_triplets(text):
         triplets.append({'head': subject.strip(), 'type': relation.strip(), 'tail': object_.strip()})
     return triplets
 
+def writeTripletsToFile(triplets, pmid, authors, date, out_1, out_2):
+    #In this file, each extracted knowledge graph corresponds to an entry in the output file . This is for experimanetal purposes
+    with open(out_1, 'a') as f:
+        for triplet in triplets:
+            f.write(f"Triplet: {triplet}, PMID: {pmid}, Authors: {authors}, Date: {date}\n")
+    #In this file, all knowledge graph associated to a single pmid is stored as a single entry. This is for experimanetal purposes
+    with open(out_2, 'a') as f:
+        triplet_entry = {
+            "title_entity_relation": {
+                "pmid": pmid,
+                "triplets": triplets,
+                "authors": authors,
+                "year": date
+            },
+            "abstract_entity_relation": {
+                "pmid": pmid,
+                "triplets": triplets,
+                "authors": authors,
+                "year": date
+            }
+        }
+        f.write(json.dumps(triplet_entry) + '\n')
+
 # Create lists to store processed data
 title_entity_relations = []
 abstract_entity_relations = []
 
 # Process each row
 for index, row in df.iterrows():
-    title_entity_relation, abstract_entity_relation = process_row(row)
-    title_entity_relations.append(title_entity_relation)
-    abstract_entity_relations.append(abstract_entity_relation)
-
-# Create a DataFrame from the processed data
-processed_df = pd.DataFrame({
-    'title_entity_relation': title_entity_relations,
-    'abstract_entity_relation': abstract_entity_relations
-})
-
-
-# Convert None values to empty dictionaries
-processed_df['title_entity_relation'].fillna({}, inplace=True)
-processed_df['abstract_entity_relation'].fillna({}, inplace=True)
-
-# Convert DataFrame to JSON
-processed_data_json = processed_df.to_json(orient='records', lines=True)
-
-# Write JSON data to a file
-with open('ER.json', 'w') as f:
-    f.write(processed_data_json)
+    processRow(row, out_file1, out_file2)
