@@ -24,7 +24,7 @@ conda activate smartpub
 pip install -r requirements.txt
 ```
 
-### Download the quantize model from the link provided in model folder & keep the model in the model directory:
+### Download the quantized model from the link provided in model folder & keep the model in the model directory:
 
 ```ini
 ## Download the Llama 2 Model:
