@@ -25,15 +25,14 @@ conda create -n smartpub python=3.8 -y
 conda activate smartpub
 ```
 
-### STEP 03- install the requirements
+### STEP 03- Install the requirements
 ```bash
 pip install -r requirements.txt
 ```
 
-### Download the quantized model from the link provided in model folder & keep the model in the model directory:
+### STEP 04- Finally run the following command
 
 ```bash
-# Finally run the following command
 python app.py
 ```
 
