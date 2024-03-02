@@ -2,12 +2,15 @@ import pandas as pd
 from transformers import pipeline
 import nltk
 from nltk.tokenize import word_tokenize
+import torch
 
 #CHANGE THE YEAR TO THE SPECIFIC YEAR YOU NEED
 year=2013
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 # Initialize the triplet extraction pipeline using Babelscape/rebel-large model
-triplet_extractor = pipeline('text2text-generation', model='Babelscape/rebel-large', tokenizer='Babelscape/rebel-large')
+triplet_extractor = pipeline('text2text-generation', model='Babelscape/rebel-large', tokenizer='Babelscape/rebel-large', device=device)
 
 # Load the CSV file into a DataFrame
 df_all = pd.read_csv("AllData.csv")
