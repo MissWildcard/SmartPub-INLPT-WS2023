@@ -9,7 +9,7 @@ import os
 import transformers
 
 
-def pipeline(config, question: str, device=-1, verbose=True) -> str:
+def pipeline(api_key:str, question: str, hf_auth=hf_auth, device=-1, verbose=True) -> str:
 	"""
 	Create a pipeline for the question anwering
 	:param config: configuration to set up for injector
@@ -21,29 +21,27 @@ def pipeline(config, question: str, device=-1, verbose=True) -> str:
 
 	# create retriever KGs from Pinecone database
 
-	retriever = DBRetriever(api_key=config.api_key, 
-							index_name=config.index_name, namespace=config.namespace,
-							model_name=config.model_name, batch_size=config.batch_size)
+	retriever = DBRetriever(api_key=api_key, 
+							index_name="smartpub", namespace="assignment_embedding",
+							model_name='meta-llama/Llama-2-13b-chat-hf', batch_size=32)
 
-	docs_pmid = retriever.getTopSimilarDocs(question=question, num_docs=config.k)
+	docs_pmid = retriever.getTopSimilarDocs(question=question, num_docs=10)
 
 	# QA model
-	qa = QA(prompt=question, device=device, hf_auth=config.hf_auth)
+	qa = QA(prompt=question, device=device, hf_auth=hf_auth)
 	qa.qa_inference(qa.task, qa.model_name)
 
 	rag_pipeline = RetrievalQA.from_chain_type(
 	    llm=qa.llm,
 	    chain_type="stuff",
 	    verbose=verbose,
-	    retriever=retriever.vectorstore_db.as_retriever(search_kwargs={"k":config.k}),
+	    retriever=retriever.vectorstore_db.as_retriever(search_kwargs={"k":10}),
 	    chain_type_kwargs={
 	        "verbose": verbose },
 
 	)
 
-	answer = rag_pipeline(question)['result']
-
-	return answer
+	return rag_pipeline
 
 	
 
