@@ -98,8 +98,7 @@ class PineconeVDB():
             index.upsert(vectors=zip(ids, embeddings, metadata), namespace=namespace)
         print("Indexing Complete!")
 
-    def find_most_similar_docs(self, query: str, index_name: str, num_of_chunks: int = 3):
-        index = self.pc_db.Index(index_name)
+    def find_most_similar_docs(self, query: str, index: pc.Index, num_of_chunks: int = 3):
         vectorstore = vectorstore_pc(index, self.embedding_model, 'relations')
         return vectorstore.similarity_search(
                 query, 
@@ -123,20 +122,20 @@ def readout_triplets(triplets: list[dict]):
     return readout
 
 
+if __name__ == 'main':
+    directory_path = "smartpub_app\model\data_files"
+    db = PineconeVDB(embedding_model_name='sentence-transformers/all-MiniLM-L6-v2')
+    index_name = "smartpub"
+    #db.create_pinecone_index(index_name)
+    namespace = "assignment_embedding"
+    
+    for filename in os.listdir(directory_path):
+        file_path = os.path.join(directory_path, filename)
+        if os.path.isfile(file_path):
+            with open(file_path, 'r', encoding='utf8') as file:
+                print(f"Processing {filename}")
+                data = json.load(file)
 
-directory_path = "smartpub_app\model\data_files"
-db = PineconeVDB(embedding_model_name='sentence-transformers/all-MiniLM-L6-v2')
-index_name = "smartpub"
-#db.create_pinecone_index(index_name)
-namespace = "assignment_embedding"
 
-for filename in os.listdir(directory_path):
-    file_path = os.path.join(directory_path, filename)
-    if os.path.isfile(file_path):
-        with open(file_path, 'r', encoding='utf8') as file:
-            print(f"Processing {filename}")
-            data = json.load(file)
-
-
-        db.push_data_to_index(index_name, data, namespace)
-        print(f"Pushed {filename} to Index {index_name}")
+            db.push_data_to_index(index_name, data, namespace)
+            print(f"Pushed {filename} to Index {index_name}")
