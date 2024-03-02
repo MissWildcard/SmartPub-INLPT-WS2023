@@ -8,6 +8,7 @@ from langchain.llms import CTransformers
 from dotenv import load_dotenv
 from src.prompt import *
 import os 
+from model.model import pipeline
 
 
 app = Flask(__name__)
