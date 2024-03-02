@@ -24,15 +24,6 @@ conda activate smartpub
 pip install -r requirements.txt
 ```
 
-
-### Create a `.env` file in the root directory and add your Pinecone credentials as follows:
-
-```ini
-PINECONE_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-PINECONE_API_ENV = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-```
-
-
 ### Download the quantize model from the link provided in model folder & keep the model in the model directory:
 
 ```ini
