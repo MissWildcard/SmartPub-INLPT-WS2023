@@ -1,9 +1,3 @@
-# SmartPub-INLPT-WS2023
-
-RAG on QA system
-![SmartPub](SmartPub.png)
-
-
 # Smart pub chat bot 
 
 # How to run?

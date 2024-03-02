@@ -14,6 +14,7 @@ app = Flask(__name__)
 
 load_dotenv()
 
+"""
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY") 
 PINECONE_API_ENV = os.environ.get("PINECONE_API_ENV")
 
@@ -40,10 +41,27 @@ qa=RetrievalQA.from_chain_type(
     retriever=docsearch.as_retriever(search_kwargs={'k': 2}),
     return_source_documents=True, 
     chain_type_kwargs=chain_type_kwargs)
-
+"""
 @app.route("/")
 def index():
     return render_template('chat.html')
 
+print("")
+@app.route("/get", methods=["GET", "POST"])
+def chat():
+    try:
+        msg = request.form["msg"]
+        input = msg
+        print(input)
+        result=qa({"query": input})
+        print("Response : ", result["result"])
+        return str(result["result"])
+    except Exception as e:
+        print("An error occurred:", e)
+        return "An error occurred: " + str(e), 500 
+
+
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port= 8080, debug= True)
