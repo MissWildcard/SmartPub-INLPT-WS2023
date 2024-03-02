@@ -1,8 +1,8 @@
 import numpy as np
 import torch
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-from pinecone import Pinecone
-from langchain.vectorstores import Pinecone as pc
+import pinecone
+from langchain.vectorstores import Pinecone 
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())
 
@@ -18,10 +18,10 @@ class DBRetriever:
             device = 'cpu'
             print("You are working on CPU. This may lead to long computation times.")
         # Initialize Pinecone client
-        pinecone = Pinecone(api_key=api_key) 
+        pc = pinecone.Pinecone(api_key=api_key) 
 
         # Initialize the existing index
-        self.index = pinecone.Index(name=index_name)
+        self.index = pc.Index(name=index_name)
 
         #Using pre-trained STS model
         self.sts_model = HuggingFaceEmbeddings(
@@ -37,7 +37,7 @@ class DBRetriever:
         # Calculate STS between question and each document
         #question_embedding = sts_model.embed_documents([question])[0]
         
-        self.vectorstore_db = pc(self.index, self.sts_model.embed_query, 'relations')
+        self.vectorstore_db = Pinecone(self.index, self.sts_model.embed_query, 'relations')
         # Query the index to find similar documents
         
 

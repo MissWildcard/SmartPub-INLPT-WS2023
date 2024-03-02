@@ -2,14 +2,14 @@
 This contains a simple script to the pipeline
 """
 
-from db_retriever import DBRetriever
-from qa_inference import QA
+from .db_retriever import DBRetriever
+from .qa_inference import QA
 from langchain.chains import RetrievalQA
 import os
 import transformers
 
 
-def pipeline(api_key:str, question: str, hf_auth=hf_auth, device=-1, verbose=True) -> str:
+def pipeline(api_key:str, question: str, hf_auth, device=-1, verbose=True) -> str:
 	"""
 	Create a pipeline for the question anwering
 	:param config: configuration to set up for injector

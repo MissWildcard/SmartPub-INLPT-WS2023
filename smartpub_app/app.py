@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify, request 
 from src.helper import *
 from langchain.vectorstores import Pinecone
-import pinecone 
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.llms import CTransformers
@@ -9,40 +8,23 @@ from dotenv import load_dotenv
 from src.prompt import *
 import os 
 from model.model import pipeline
+from model.model import pipeline
+from model.qa_inference import QA
+from langchain.chains import RetrievalQA
+import os
+import transformers
 
 
 app = Flask(__name__)
 
-load_dotenv()
+def setup_pipeline():
+    api_key = os.environ.get('PIPELINE_API_KEY')  # Replace with your API key
+    hf_auth = os.environ.get('HF_AUTH') # Replace with your Hugging Face authentication token
+    return api_key,hf_auth
 
-"""
-PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY") 
-PINECONE_API_ENV = os.environ.get("PINECONE_API_ENV")
+# Initialize your pipeline when the application starts
+api_key,hf_auth = setup_pipeline()
 
-embeddings = download_hugging_face_embedding()
-
-pinecone.init(api_key=PINECONE_API_KEY,environment=PINECONE_API_ENV)
-
-index_name = "medical-bot"
-
-docsearch = Pinecone.from_existing_index(index_name,embeddings)
-
-
-PROMPT=PromptTemplate(template=prompt_template, input_variables=["context", "question"])
-chain_type_kwargs={"prompt": PROMPT}
-
-llm=CTransformers(model="model/llama-2-7b-chat.ggmlv3.q4_0.bin",
-                  model_type="llama",
-                  config={'max_new_tokens':512,
-                          'temperature':0.8})
-
-qa=RetrievalQA.from_chain_type(
-    llm=llm, 
-    chain_type="stuff", 
-    retriever=docsearch.as_retriever(search_kwargs={'k': 2}),
-    return_source_documents=True, 
-    chain_type_kwargs=chain_type_kwargs)
-"""
 @app.route("/")
 def index():
     return render_template('chat.html')
@@ -54,9 +36,9 @@ def chat():
         msg = request.form["msg"]
         input = msg
         print(input)
-        result=qa({"query": input})
-        print("Response : ", result["result"])
-        return str(result["result"])
+        result = pipeline(api_key= api_key,hf_auth=hf_auth,question=input)
+        print("Response : ", result)
+        return str(result)
     except Exception as e:
         print("An error occurred:", e)
         return "An error occurred: " + str(e), 500 

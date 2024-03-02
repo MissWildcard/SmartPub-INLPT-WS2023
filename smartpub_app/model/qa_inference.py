@@ -6,6 +6,7 @@ This contains the script to proceed the QA inference with some models
 from transformers import pipeline, LlamaTokenizer, BitsAndBytesConfig, AutoConfig, AutoModelForCausalLM
 from torch import cuda, bfloat16
 from langchain.llms import HuggingFacePipeline
+import os
 
 
 
@@ -42,7 +43,7 @@ class QA:
 		# hence text-generation was used instead
 		if task == "text-generation":
 			tokenizer = LlamaTokenizer.from_pretrained(model_name, use_auth_token=self.hf_auth)
-			bitsAndBites_config = transformers.BitsAndBytesConfig(
+			bitsAndBites_config = BitsAndBytesConfig(
 									    load_in_4bit=True,
 									    bnb_4bit_quant_type='nf4',
 									    bnb_4bit_use_double_quant=True,
