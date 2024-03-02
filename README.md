@@ -52,11 +52,6 @@ https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/tree/main
 ```
 
 ```bash
-# run the following command
-python store_index.py
-```
-
-```bash
 # Finally run the following command
 python app.py
 ```
