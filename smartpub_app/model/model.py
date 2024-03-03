@@ -46,7 +46,9 @@ def pipeline(api_key:str, question: str, hf_auth:str,
 
 	)
 
-	return rag_pipeline
+	answer = rag_pipeline['result']
+
+	return answer
 
 	
 
