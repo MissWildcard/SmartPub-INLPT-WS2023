@@ -10,7 +10,10 @@ from dotenv import load_dotenv
 from transformers import LlamaTokenizer
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())
-
+import pandas as pd
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+import sys
+import pandas as pd
 
 class PineconeVDB():
     """
@@ -62,7 +65,7 @@ class PineconeVDB():
             print(f"Index {index_name} already exists")
         
 
-    def push_data_to_index(self, index_name: str, data: list[dict], namespace = str):
+    def push_data_to_index(self, index_name: str, data: list[dict], namespace:str):
         #if index_name not in self.pc_db.list_indexes().names():
         #    return ValueError("The Index you are trying to push to does not exist. Use PineconeVDB.list_indexes() to see the available indexes.")            
         #else:
@@ -121,20 +124,102 @@ def readout_triplets(triplets: list[dict]):
         readout += f"|{triplet['head']} - {triplet['type']} - {triplet['tail']}| "
     return readout
 
+class PineconeVDBRawText(PineconeVDB):
+    """
+    This class inherits the PineconeVDB, doing the same purpose, but use the raw text as content instead the KGs
+    """
+    def __init__(self, embedding_model_name: str, batch_size: int = 32):
+        super().__init__(embedding_model_name, batch_size)
+        self.create_text_splitter()
+
+    def create_text_splitter(self):
+        token_len = lambda text: len(self.tokenizer.encode(text))
+
+        self.text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=400,
+            chunk_overlap=50,
+            length_function=token_len,
+            separators=['\n\n', '\n', ' ', '']
+        ) 
+
+    def push_data_to_index(self, index_name:str, data:pd.DataFrame):
+        index = self.pc_db.Index(index_name)
+
+        for i in tqdm(range(0, len(data), self.batch_size), desc=f"Pushing data to Index {index_name}:"):       
+            i_end = min(len(data), i+ self.batch_size)
+            batch = data[i:i_end]
+
+            texts = []
+            metadata = []
+            ids = []
+
+            for entry in batch:
+                
+                # take care of title or abstract that is empty
+                pmid = str(row['PMID'])
+                title = str(row['Title']).strip()
+                abstract = str(row['Abstract']).strip()
+                authors = row['Authors']
+                date = f"{int(row['Month'])}-{int(row['Year'])}"
+
+                if not title:
+                    if abstract:
+                        ids.append(pmid)
+                        texts.append('text': f'Title:  Abstract: {abstract}')
+                elif not abstract:
+                    if title:
+                        ids.append(pmid)
+                        texts.append(f'Title: {title} Abstract:')
+                else:
+                    chunks = self.text_splitter.split_text(row.Abstract)
+                    title = row.Title
+                    for i, chunk in enumerate(chunks):
+                        ids.append(f'{pmid}-{i}')
+                        texts.append(f'Title: {title} Abstract p{i+1} {chunk}')
+                
+
+                # get metadata to store in Pinecone
+                metadata.append({'text': texts,
+                                   'authors': authors,
+                                   'date': date
+                                   })
+            
+            embeddings = self.embedding_model.embed_documents(texts)
+                
+            index.upsert(vectors=zip(ids, embeddings, metadata), namespace=namespace)
+        print("Indexing Complete!")
+
+
 
 if __name__ == 'main':
-    directory_path = "smartpub_app\model\data_files"
-    db = PineconeVDB(embedding_model_name='sentence-transformers/all-MiniLM-L6-v2')
+    # directory_path = "smartpub_app\model\data_files"
+    # db = PineconeVDB(embedding_model_name='sentence-transformers/all-MiniLM-L6-v2')
+    # index_name = "smartpub"
+    # #db.create_pinecone_index(index_name)
+    # namespace = "assignment_embedding"
+    
+    # for filename in os.listdir(directory_path):
+    #     file_path = os.path.join(directory_path, filename)
+    #     if os.path.isfile(file_path):
+    #         with open(file_path, 'r', encoding='utf8') as file:
+    #             print(f"Processing {filename}")
+    #             data = json.load(file)
+
+
+    #         db.push_data_to_index(index_name, data, namespace)
+    #         print(f"Pushed {filename} to Index {index_name}")
+
+    directory_path = sys.argv[1]
+    db = PineconeVDBRawText(embedding_model_name='sentence-transformers/all-MiniLM-L6-v2')
     index_name = "smartpub"
     #db.create_pinecone_index(index_name)
-    namespace = "assignment_embedding"
+    namespace = "assignment_rawtext"
     
     for filename in os.listdir(directory_path):
         file_path = os.path.join(directory_path, filename)
         if os.path.isfile(file_path):
-            with open(file_path, 'r', encoding='utf8') as file:
-                print(f"Processing {filename}")
-                data = json.load(file)
+            print(f"Processing {filename}")
+            data = pd.read_csv(file_path)
 
 
             db.push_data_to_index(index_name, data, namespace)
