@@ -1,3 +1,7 @@
+"""
+This contains a simple script to set up the connection to the Pinecone database that contains all of the documents
+"""
+
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 import pinecone
 #from langchain.vectorstores import Pinecone 
@@ -15,6 +19,7 @@ class DBRetriever:
         Default model is the SentenceTransformer Mini Llama
 
         :param str api_key: The API key for accessing the service.
+        :param str hf_auth: The HF authentication key to retrieve
         :param str index_name: The name of the index to be used (default is "smartpub").
         :param str model_name: The name of the pre-trained model to be used (default is 'sentence-transformers/all-MiniLM-L6-v2').
         :param int batch_size: The batch size for processing data (default is 32).

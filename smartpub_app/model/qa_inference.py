@@ -22,7 +22,7 @@ class QA:
 		self.hf_auth = hf_auth
 
 
-	def qa_inference(self, task:str="text-generation", model_name:str='meta-llama/Llama-2-13b-chat-hf',  device=-1):
+	def qa_inference(self, task:str="text-generation", model_name:str='meta-llama/Llama-2-13b-chat-hf',  device=torch.device('cpu')):
 		"""
 		Only use pretrained model (without any extra finetuning on any dataset)
 
