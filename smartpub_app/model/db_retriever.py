@@ -3,10 +3,11 @@ import pinecone
 #from langchain.vectorstores import Pinecone 
 from langchain_pinecone import Pinecone
 import torch
+from transformers import LlamaTokenizer
 
 class DBRetriever:
 
-    def __init__(self, api_key:str, index_name:str="smartpub", 
+    def __init__(self, api_key:str, hf_auth:str, index_name:str="smartpub", 
                     model_name:str='sentence-transformers/all-MiniLM-L6-v2', batch_size=32, device=torch.device('cpu')):
 
         """
@@ -28,7 +29,8 @@ class DBRetriever:
         # Initialize the existing index
         self.index = pc.Index(name=index_name)
 
-    
+
+        tokenizer = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-13b-chat-hf",token=hf_auth)    
         self.embed_model = HuggingFaceEmbeddings(
                 model_name=model_name,
                 model_kwargs={'device': device},
