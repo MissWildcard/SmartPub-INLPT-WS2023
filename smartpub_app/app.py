@@ -1,7 +1,5 @@
 from flask import Flask, render_template, jsonify, request 
-from src.helper import *
 from dotenv import load_dotenv
-from src.prompt import *
 from model.model import pipeline
 from model.qa_inference import QA
 from langchain.chains import RetrievalQA
