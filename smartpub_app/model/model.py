@@ -10,7 +10,7 @@ import transformers
 
 
 def pipeline(api_key:str, question: str, hf_auth:str, 
-			index_name="smartpub", namespace="assignment_embedding", model_name='meta-llama/Llama-2-13b-chat-hf',
+			index_name="smartpub", model_name='meta-llama/Llama-2-13b-chat-hf',
 			device=-1, verbose=True, batch_size=32, k=10) -> str:
 	"""
 	Create a pipeline for the question anwering
@@ -24,7 +24,7 @@ def pipeline(api_key:str, question: str, hf_auth:str,
 	# create retriever KGs from Pinecone database
 
 	retriever = DBRetriever(api_key=api_key, 
-							index_name=index_name, namespace=namespace,
+							index_name=index_name,
 							model_name=model_name, batch_size=batch_size, device=device)
 
 	#docs_pmid = retriever.getTopSimilarDocs(question=question, num_docs=10)
