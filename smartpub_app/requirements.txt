@@ -1,0 +1,31 @@
+-e .
+babel
+bert_score
+ctransformers==0.2.5
+evaluate
+flask
+https://github.com/amazon-science/ReFinED/archive/refs/tags/V1.zip
+langchain-openai==0.0.7
+langchain-pinecone==0.0.3
+langchain==0.1.9
+langchain_pinecone
+matplotlib
+networkx
+nltk
+numpy
+pandas
+pinecone-client==3.0.0
+pinecone-datasets==0.7.0
+pydantic==1.10.9
+python-dotenv
+pyvis
+rouge_score
+scikit-learn
+seaborn
+sentence-transformers
+sentence-transformers == 2.2.2
+sentencepiece
+tokenizers
+torch
+tqdm
+transformers
