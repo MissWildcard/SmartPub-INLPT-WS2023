@@ -11,3 +11,17 @@ tqdm
 rouge_score
 bert_score
 -e .
+transformers
+torch
+tokenizers
+sentence-transformers
+sentencepiece
+nltk
+scikit-learn
+pandas
+babel
+numpy
+matplotlib
+seaborn
+networkx
+pyvis
