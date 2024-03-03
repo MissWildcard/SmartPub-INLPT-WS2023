@@ -1,6 +1,7 @@
 ''' Implementation to extract knowledge graph from the pubmed dataset.
 Knowlegde Graph is extracted in the form of triplets (entity, relation, entity)
-For this, we use Babelscape/rebel model from https://github.com/Babelscape/rebel '''
+For this, we use Babelscape/rebel model from https://github.com/Babelscape/rebel 
+Make sure that you reassign the variable 'year' with the year for which you want to extract the knowledge graph '''
 
 import pandas as pd
 from transformers import pipeline, AutoTokenizer
@@ -12,6 +13,7 @@ import json
 #CHANGE THE YEAR TO THE SPECIFIC YEAR YOU NEED
 year=2014
 
+#Use cuda if available
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 #Name of output json file
