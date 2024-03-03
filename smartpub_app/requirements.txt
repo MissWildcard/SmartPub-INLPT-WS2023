@@ -25,3 +25,8 @@ matplotlib
 seaborn
 networkx
 pyvis
+pinecone-client==3.0.0
+pinecone-datasets==0.7.0
+langchain-pinecone==0.0.3
+langchain-openai==0.0.7
+langchain==0.1.9
