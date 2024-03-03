@@ -4,16 +4,17 @@ This contains the script to proceed the QA inference with some models
 
 
 from transformers import pipeline, LlamaTokenizer, BitsAndBytesConfig, AutoConfig, AutoModelForCausalLM
-from torch import cuda, bfloat16
+from torch import bfloat16
 from langchain.llms import HuggingFacePipeline
 import os
+import torch
 
 
 
 class QA:
 	
 	def __init__(self, prompt: str, task:str="text-generation", model_name:str='meta-llama/Llama-2-13b-chat-hf',
-				  device=-1, hf_auth=os.environ.get('HF_AUTH')):
+				  device=torch.device('cpu'), hf_auth=os.environ.get('HF_AUTH')):
 		self.prompt = prompt
 		self.task = task
 		self.model_name = model_name

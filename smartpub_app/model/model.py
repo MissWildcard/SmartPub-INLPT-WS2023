@@ -7,11 +7,12 @@ from .qa_inference import QA
 from langchain.chains import RetrievalQA
 import os
 import transformers
+import torch
 
 
 def pipeline(api_key:str, question: str, hf_auth:str, 
 			index_name="smartpub", model_name='meta-llama/Llama-2-13b-chat-hf',
-			device=-1, verbose=True, batch_size=32, k=10) -> str:
+			device=torch.device('cpu'), verbose=True, batch_size=32, k=10) -> str:
 	"""
 	Create a pipeline for the question anwering
 	:param config: configuration to set up for injector
@@ -22,6 +23,8 @@ def pipeline(api_key:str, question: str, hf_auth:str,
 
 
 	# create retriever KGs from Pinecone database
+
+	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 	retriever = DBRetriever(api_key=api_key, 
 							index_name=index_name,
