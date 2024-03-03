@@ -1,13 +1,7 @@
 from flask import Flask, render_template, jsonify, request 
 from src.helper import *
-from langchain.vectorstores import Pinecone
-from langchain.prompts import PromptTemplate
-from langchain.chains import RetrievalQA
-from langchain.llms import CTransformers
 from dotenv import load_dotenv
 from src.prompt import *
-import os 
-from model.model import pipeline
 from model.model import pipeline
 from model.qa_inference import QA
 from langchain.chains import RetrievalQA
