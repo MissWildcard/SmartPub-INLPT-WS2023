@@ -8,6 +8,7 @@ import pinecone
 from langchain_pinecone import Pinecone
 import torch
 from transformers import LlamaTokenizer
+from .qa_inference import QA
 
 class DBRetriever:
 
@@ -43,3 +44,31 @@ class DBRetriever:
             )
         self.vectorstore_db = Pinecone(self.index, self.embed_model.embed_query, 'relations')
 
+        self.device = device
+        self.hf_auth = hf_auth
+        
+
+    def run(self, question):
+        """Create a pipeline for the question anwering
+            
+            :param question: question as the query
+            :return: final answer as output
+        """
+        
+        # QA model
+        qa = QA(prompt=question, device=self.device, hf_auth=self.hf_auth)
+        qa.qa_inference(qa.task, qa.model_name)
+
+        rag_pipeline = RetrievalQA.from_chain_type(
+            llm=qa.llm,
+            chain_type="stuff",
+            verbose=verbose,
+            retriever=self.vectorstore_db.as_retriever(search_kwargs={"k":k}),
+            chain_type_kwargs={
+                "verbose": verbose },
+
+        )
+
+        answer = rag_pipeline['result']
+
+        return answer

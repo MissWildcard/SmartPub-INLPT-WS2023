@@ -39,16 +39,16 @@ class QA:
 
 		# for text-generation meta-llama/Llama-2-13b-chat-hf was used instead
 		if task == "text-generation":
-			tokenizer = LlamaTokenizer.from_pretrained(model_name, use_auth_token=self.hf_auth)
-			bitsAndBites_config = BitsAndBytesConfig(
-									    load_in_4bit=True,
-									    bnb_4bit_quant_type='nf4',
-									    bnb_4bit_use_double_quant=True,
-									    bnb_4bit_compute_dtype=bfloat16
-									)
-			model_config = AutoConfig.from_pretrained(model_name, use_auth_token=self.hf_auth)
+			tokenizer = LlamaTokenizer.from_pretrained(model_name, token=self.hf_auth)
+			# bitsAndBites_config = BitsAndBytesConfig(
+			# 						    load_in_4bit=True,
+			# 						    bnb_4bit_quant_type='nf4',
+			# 						    bnb_4bit_use_double_quant=True,
+			# 						    bnb_4bit_compute_dtype=bfloat16
+			# 						)
+			model_config = AutoConfig.from_pretrained(model_name, token=self.hf_auth)
 			model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True,
-														config=model_config, quantization_config=bitsAndBites_config,
+														config=model_config, #quantization_config=bitsAndBites_config,
 														device_map='auto', token=self.hf_auth)
 			model.eval()
 			self.qa_pipeline = pipeline(task=task, tokenizer=tokenizer, model=model_name, temperature=0.01, max_new_tokens=512, repetition_penalty=1.1, device=device)
