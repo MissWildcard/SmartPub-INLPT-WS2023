@@ -24,8 +24,6 @@ class QA:
 	def qa_inference(self, task:str="text-generation", model_name:str='meta-llama/Llama-2-13b-chat-hf',  device=-1):
 		"""
 		Only use pretrained model (without any extra finetuning on any dataset)
-		The idea is to pass a whole sequence into the pipeline in form of 
-		 "<prompt> question: <question> answer: ""
 
 		Tasks used are text generations/text2text generations depending on how experimented models are supported
 		on Hugging Face
@@ -38,9 +36,7 @@ class QA:
 		:return: generated answer / only in case of text2text-generation
 		"""
 
-		# for  meta-llama/Llama-2-13b-chat-hf
-		# In this inference, as huggingface pipeline does not support text2text-generation for gpt2,
-		# hence text-generation was used instead
+		# for text-generation meta-llama/Llama-2-13b-chat-hf was used instead
 		if task == "text-generation":
 			tokenizer = LlamaTokenizer.from_pretrained(model_name, use_auth_token=self.hf_auth)
 			bitsAndBites_config = BitsAndBytesConfig(
@@ -56,8 +52,6 @@ class QA:
 			model.eval()
 			self.qa_pipeline = pipeline(task=task, tokenizer=tokenizer, model=model_name, temperature=0.01, max_new_tokens=512, repetition_penalty=1.1, device=device)
 			self.llm = HuggingFacePipeline(pipeline=self.qa_pipeline)
-			#answer = self.qa_pipeline(self.prompt)			
-			#return answer[0]['generated_text'].split('Answer: ', 1)[-1]
 
 		# for bert-large-uncased, t5-small, t5-base, t5-large
 		elif task == "text2text-generation":
