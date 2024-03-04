@@ -16,7 +16,7 @@ For this project, we made use of articles from medical domain that are published
 Clone the repository
 
 ```bash
-Project repo: https://github.com/
+Project repo: https://github.com/](https://github.com/Maria-Mathews/SmartPub-INLPT-WS2023.git
 ```
 
 ### STEP 01- Navigate to the folder using the below command
