@@ -1,6 +1,6 @@
 # Smart pub chat bot 
 
-#Team Members (Name, Matriculation Number, Github username, Mail id)  <br />
+# Team Members (Name, Matriculation Number, Github username, Mail id) :  <br />
 Blanca Birn, 3404292, Lavudin, Birn@stud.uni-heidelberg.de  <br />
 Dang Hoang Dung Nguyen, 3512492, jasmine95dn, d.nguyen@stud.uni-heidelberg.de  <br />
 Mani Smaran Nair,3771609,M-Smaran,mani.nair@stud.uni-heidelberg.de  <br />
