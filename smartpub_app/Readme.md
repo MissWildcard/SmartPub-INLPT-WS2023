@@ -38,7 +38,8 @@ python app.py
 
 Now,
 ```bash
-open up localhost:
+open up localhost: http://192.168.178.94:8080/
+And type your question
 ```
 
 
