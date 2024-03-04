@@ -51,4 +51,7 @@ Now,
 open up localhost:
 ```
 
+## Running the Model
+
+If the website is taking longer than usual to load, you can run the model using the notebook `smartpub_system.ipynb` located in the "research" directory.
 
