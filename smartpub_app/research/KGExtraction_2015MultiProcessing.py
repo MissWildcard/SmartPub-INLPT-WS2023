@@ -1,3 +1,5 @@
+'''An attempt to KG extraction with multiprocessing'''
+
 import pandas as pd
 from transformers import pipeline, AutoTokenizer
 import nltk
