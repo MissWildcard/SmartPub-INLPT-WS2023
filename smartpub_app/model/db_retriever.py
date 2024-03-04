@@ -62,10 +62,10 @@ class DBRetriever:
         rag_pipeline = RetrievalQA.from_chain_type(
             llm=qa.llm,
             chain_type="stuff",
-            verbose=verbose,
-            retriever=self.vectorstore_db.as_retriever(search_kwargs={"k":k}),
+            verbose=True,
+            retriever=self.vectorstore_db.as_retriever(search_kwargs={"k":10}),
             chain_type_kwargs={
-                "verbose": verbose },
+                "verbose": True },
 
         )
 
