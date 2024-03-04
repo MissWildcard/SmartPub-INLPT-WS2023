@@ -188,8 +188,7 @@ about 250 question answer sets.
 Jin et al. (2019) use POS-Tagging to find documents that have 1.) a statement
 title meaning a POS-structure of NP-(VBP/VBZ) and 2.) an abstract that contains
 a labelled conclusion. Many documents in the dataset follow a structure for their
-abstract that contains clearly labelled sections e.g. ’INTRODUCTION:’, ’CON-
-CLUSION:’. The Title is then transformed into a question by adding copulas or
+abstract that contains clearly labelled sections e.g. ’INTRODUCTION:’, ’CONCLUSION:’. The Title is then transformed into a question by adding copulas or
 auxiliary verbs as well as a question mark. The correct answer was determined
 by assessing the negation status of the VBP. We collected 374 questions overall
 but they were of mostly poor quality e.g. ”Is Significance of natural language pro-
