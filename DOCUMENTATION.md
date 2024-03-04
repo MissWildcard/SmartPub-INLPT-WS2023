@@ -35,7 +35,8 @@ knowledge from KGs was proposed (Baek et al., 2023), which focuses solemnly
 on enriching the inputs and requires no model updating, in short, a zero-shot
 method. Inspired by this framework idea about knowledge graphs, we applied
 this to our Retrieval-Augmented Generation framework SmartPub with the goal to
-build a simple but efficient QA system on the PubMed Dat
+build a simple but efficient QA system on the PubMed Data.
+
 # Related Works
 
 ## Finetuning pre-trained LLMs on QA Task
@@ -95,9 +96,10 @@ different datasets.
 The whole process is as follows: Given a question as the query, we searched in
 our built-in knowledge graph database to retrieve the top k most similar documents
 to the question (by comparing cosine similarity of their sentence embeddings).
-Detail can be seen in Figure 3
+Detail can be seen in Figure 3.
 
-![SmartPub Process](SmartPub.png){#fig:enter-label width="\\textwidth"}
+![SmartPub Process](SmartPub.png)
+Figure 1: SmartPub Proces
 
 ## Knowledge Graph
 
@@ -163,10 +165,15 @@ in the pipeline for further processing.
 
 ![Non-empty Context](Non_null.png)
 
+Figure 2: Non-empty Context
+
 ![Frequency distribution of intelligence over the
 years](KeyowrdCount.png)
 
-### Question Answer Sets {#sub-sec:eval}
+Figure 3: Frequency distribution of intelligence over the
+years
+
+### Question Answer Sets
 
 During our research, we came across PubmedQA dataset by Jin et al. (2019)
 which is a question answering dataset consisting of question, structured context,
@@ -181,8 +188,7 @@ about 250 question answer sets.
 Jin et al. (2019) use POS-Tagging to find documents that have 1.) a statement
 title meaning a POS-structure of NP-(VBP/VBZ) and 2.) an abstract that contains
 a labelled conclusion. Many documents in the dataset follow a structure for their
-abstract that contains clearly labelled sections e.g. ’INTRODUCTION:’, ’CON-
-CLUSION:’. The Title is then transformed into a question by adding copulas or
+abstract that contains clearly labelled sections e.g. ’INTRODUCTION:’, ’CONCLUSION:’. The Title is then transformed into a question by adding copulas or
 auxiliary verbs as well as a question mark. The correct answer was determined
 by assessing the negation status of the VBP. We collected 374 questions overall
 but they were of mostly poor quality e.g. ”Is Significance of natural language pro-
@@ -244,13 +250,12 @@ inverse-document-frequency (IDF) as a weight, which is one of the most
 prominent approaches. With $Q = \{q_1, q_2, …,q_3\}$, where Q is the
 query and $q_i$ is a keyword and D as a document:
 
-$$\text{score}(D, Q) = \sum_{i=1}^n \text{IDF}(q_i) \frac{\#(q_i \, \text{in} \, D) \cdot (k1+1)}{\#(q_i \, \text{in} \, D) + k1 \left(1 - b + b \cdot \frac{|D|}{\text{avrg-doc-len}}\right)}$$
+$$\text{score}(D, Q) = \sum_{i=1}^n \text{IDF}(q_i) \frac{(q_i \, \text{in} \, D) \cdot (k1+1)}{(q_i \, \text{in} \, D) + k1 \left(1 - b + b \cdot \frac{|D|}{\text{avrg-doc-len}}\right)}$$
 
 k1 and b are free parameters that can be optimized. We choose the
 commonly used values k1 = 1.2 and b = 0.75.
 
-**Sentence Embeddings**[]{#sub-sec:embeddings
-label="sub-sec:embeddings"}
+**Sentence Embeddings**
 
 The embedding used in the final model are ’sentence-transformers/all-MiniLM-L6-
 v2’ (in further text referred to as MiniLM) from HuggingFace. This embedding is
@@ -277,8 +282,7 @@ model setup.
 
 For BM25 we determined in not documented small experiments very early on
 and then confirmed it by manual evaluation later that this method does
-not retrieve relevant documents. For details please see table
-[1](#tab:embeddings){reference-type="ref" reference="tab:embeddings"}.
+not retrieve relevant documents. For details please see the table below.
 It also seemingly prefers short documents over long ones. Penalising
 long documents unfairly is a known problem of BM25, but we were unsure
 if it was applicable here, as the retrieved documents were considerably
@@ -297,28 +301,27 @@ Unfortunately, the results for the evaluation of the embeddings proved
 to be less than satisfactory. Evaluation showed that for the MiniLM
 model only 42% of question were able to be answered by the retrieved
 context. For BERT the results proved to be even less satisfactory.
-Further details can be found in the table
-[1](#tab:embeddings){reference-type="ref" reference="tab:embeddings"}.
+Further details can be found in the table.
 
 We explain this bad showing by BERT as it being one of the first models
 from 2018 and therefore not being state-of-the-art anymore. For the
 MiniLM the bad results could be a result of the downsizing done not only
 in the original paper but also in the embedding itself.
 
-::: {#tab:embeddings}
-  Answers    Yes   No   Total   Percentage Yes  
-  --------- ----- ---- ------- ---------------- --
-  MiniLM     21    39    50          42%        
-  BERT       14    36    50          28%        
-  BM25        5    25    30          16%        
-
-  : This table displays the evaluation of various context retrieval
-  methods concerning their ability to answer the posed question. MiniLM
-  and BERT utilised cosine similarity to determine the most relevant
-  vectors. For BM25 see section
-  [\[sub-sec:bm25\]](#sub-sec:bm25){reference-type="ref"
-  reference="sub-sec:bm25"}
 :::
+  Answers  |  Yes |  No |  Total |  Percentage Yes  
+  ---------|----- |---- |------- |------------------
+  MiniLM   |  21  |  39 |  50   |       42%        
+  BERT     |  14  |  36 |  50   |       28%        
+  BM25     |   5  |  25 |  30   |       16%        
+
+::: 
+
+This table displays the evaluation of various context retrieval
+methods concerning their ability to answer the posed question. MiniLM
+and BERT utilised cosine similarity to determine the most relevant
+vectors.  
+
 
 # Conclusions
 
