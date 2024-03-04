@@ -1,5 +1,15 @@
 # Smart pub chat bot 
 
+#Team Members (Name, Matriculation Number, Github username, Mail id)
+Blanca Birn, 3404292, Lavudin, Birn@stud.uni-heidelberg.de 
+Dang Hoang Dung Nguyen, 3512492, jasmine95dn, d.nguyen@stud.uni-heidelberg.de 
+Mani Smaran Nair,3771609,M-Smaran,mani.nair@stud.uni-heidelberg.de 
+Maria Mathews, 3751229, Maria-Mathews, maria.mathews@stud.uni-heidelberg.de 
+
+Advisor: John Ziegler 
+
+For this project, we made use of articles from medical domain that are published between the years 2013 to 2023 which contains the word 'intelligence'. The articles are accessible from https://pubmed.ncbi.nlm.nih.gov/
+
 # How to run?
 ### STEPS:
 
