@@ -1,0 +1,17 @@
+QA Pair Creation
+
+Reference: 10.18653/v1/2022.emnlp-main.42
+Asahi Ushio, Fernando Alva-Manchego, and Jose Camacho-Collados. 2022. Generative Language Models for Paragraph-Level Question Generation. In Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing, pages 670–688, Abu Dhabi, United Arab Emirates. Association for Computational Linguistics.) 
+
+Challenge: generate answers as well
+Most open source tools generate question only
+
+Resources found online:
+https://github.com/AMontgomerie/question_generator (requires openai api token; to be purchased?)
+https://github.com/asahi417/lm-question-generation 
+
+LM Question Generation:
+3 Types: 
+Pipeline
+Multitask 
+End2End
