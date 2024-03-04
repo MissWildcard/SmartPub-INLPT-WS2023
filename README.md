@@ -1,4 +1,4 @@
-# Smart pub chat bot 
+# Smart pub chat bot
 
 ### Team Members (Name, Matriculation Number, Github username, Mail id) :  <br />
 Blanca Birn, 3404292, Lavudin, Birn@stud.uni-heidelberg.de  <br />
@@ -53,5 +53,5 @@ open up localhost:
 
 ## Running the Model
 
-If the website is taking longer than usual to load, you can run the model using the notebook `smartpub_system.ipynb` located in the "research" directory.
+If the website is taking longer than usual to load, you can run the model using the notebook `smartpub_system.ipynb` located in the "smartpub_app/research" directory.
 
