@@ -1,17 +1,17 @@
 from flask import Flask, render_template, jsonify, request 
 from dotenv import load_dotenv
 from model.model import pipeline
-from model.qa_inference import QA
-from langchain.chains import RetrievalQA
 import os
-import transformers
+from model.db_retriever import DBRetriever
 
+_ = load_dotenv('.env')
 
 app = Flask(__name__)
 
 def setup_pipeline():
-    api_key = os.environ.get('PIPELINE_API_KEY')  # Replace with your API key
-    hf_auth = os.environ.get('HF_AUTH') # Replace with your Hugging Face authentication token
+    api_key = os.getenv('PINECONE_API_KEY')  # Replace with your API key
+    hf_auth = os.getenv('HF_AUTH') # Replace with your Hugging Face authentication token
+    print(api_key,hf_auth)
     return api_key,hf_auth
 
 # Initialize your pipeline when the application starts
@@ -27,7 +27,8 @@ def chat():
         msg = request.form["msg"]
         input = msg
         print(input)
-        result = pipeline(api_key= api_key,hf_auth=hf_auth,question=input)
+        retriever = DBRetriever(api_key, hf_auth)
+        result = retriever.run(input)
         print("Response : ", result)
         return str(result)
     except Exception as e:

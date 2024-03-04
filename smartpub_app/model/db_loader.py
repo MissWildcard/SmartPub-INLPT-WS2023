@@ -15,6 +15,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import sys
 import pandas as pd
 
+_ = load_dotenv('../.env')
+
 class PineconeVDB():
     """
     This class instantiates the Pinecone Vector-DataBase. It allows for the indexing of new documents as well as finding the most similar indexed document to a query.
@@ -30,7 +32,10 @@ class PineconeVDB():
             
         self.batch_size = batch_size
 
-        hf_auth = os.environ.get('HF_AUTH')
+        hf_auth = os.getenv('HF_AUTH')
+        #DEGUGGING LINES*2
+        print('I am in dbloader...........')
+        print(hf_auth)
         self.tokenizer = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-13b-chat-hf",token=hf_auth)
         
         self.embedding_model_name = embedding_model_name     
@@ -165,7 +170,7 @@ class PineconeVDBRawText(PineconeVDB):
                 if not title:
                     if abstract:
                         ids.append(pmid)
-                        texts.append('text': f'Title:  Abstract: {abstract}')
+                        texts.append('text:' f'Title:  Abstract: {abstract}')
                 elif not abstract:
                     if title:
                         ids.append(pmid)

@@ -1,12 +1,18 @@
+"""
+This contains a simple script to set up the connection to the Pinecone database that contains all of the documents
+"""
+
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 import pinecone
 #from langchain.vectorstores import Pinecone 
 from langchain_pinecone import Pinecone
 import torch
+from transformers import LlamaTokenizer
+from .qa_inference import QA
 
 class DBRetriever:
 
-    def __init__(self, api_key:str, index_name:str="smartpub", 
+    def __init__(self, api_key:str, hf_auth:str, index_name:str="smartpub", 
                     model_name:str='sentence-transformers/all-MiniLM-L6-v2', batch_size=32, device=torch.device('cpu')):
 
         """
@@ -14,6 +20,7 @@ class DBRetriever:
         Default model is the SentenceTransformer Mini Llama
 
         :param str api_key: The API key for accessing the service.
+        :param str hf_auth: The HF authentication key to retrieve
         :param str index_name: The name of the index to be used (default is "smartpub").
         :param str model_name: The name of the pre-trained model to be used (default is 'sentence-transformers/all-MiniLM-L6-v2').
         :param int batch_size: The batch size for processing data (default is 32).
@@ -28,7 +35,8 @@ class DBRetriever:
         # Initialize the existing index
         self.index = pc.Index(name=index_name)
 
-    
+
+        tokenizer = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-13b-chat-hf",token=hf_auth)    
         self.embed_model = HuggingFaceEmbeddings(
                 model_name=model_name,
                 model_kwargs={'device': device},
@@ -36,3 +44,31 @@ class DBRetriever:
             )
         self.vectorstore_db = Pinecone(self.index, self.embed_model.embed_query, 'relations')
 
+        self.device = device
+        self.hf_auth = hf_auth
+        
+
+    def run(self, question):
+        """Create a pipeline for the question anwering
+            
+            :param question: question as the query
+            :return: final answer as output
+        """
+        
+        # QA model
+        qa = QA(prompt=question, device=self.device, hf_auth=self.hf_auth)
+        qa.qa_inference(qa.task, qa.model_name)
+
+        rag_pipeline = RetrievalQA.from_chain_type(
+            llm=qa.llm,
+            chain_type="stuff",
+            verbose=verbose,
+            retriever=self.vectorstore_db.as_retriever(search_kwargs={"k":k}),
+            chain_type_kwargs={
+                "verbose": verbose },
+
+        )
+
+        answer = rag_pipeline['result']
+
+        return answer

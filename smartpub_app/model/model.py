@@ -15,7 +15,7 @@ def pipeline(api_key:str, question: str, hf_auth:str,
 			device=torch.device('cpu'), verbose=True, batch_size=32, k=10) -> str:
 	"""
 	Create a pipeline for the question anwering
-	:param config: configuration to set up for injector
+	:param : configuration to set up for injector
 	:param question: question as the query
 	:param device: choose the device to run this pipeline on, for upgrading to GPU change this to  (default: -1, which means for CPU)
 	:return: final prompt as output of KAPING to feed into a QA model
@@ -26,7 +26,7 @@ def pipeline(api_key:str, question: str, hf_auth:str,
 
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-	retriever = DBRetriever(api_key=api_key, 
+	retriever = DBRetriever(api_key=api_key, hf_auth=hf_auth,
 							index_name=index_name,
 							model_name=model_name, batch_size=batch_size, device=device)
 
@@ -46,7 +46,9 @@ def pipeline(api_key:str, question: str, hf_auth:str,
 
 	)
 
-	return rag_pipeline
+	answer = rag_pipeline['result']
+
+	return answer
 
 	
 
