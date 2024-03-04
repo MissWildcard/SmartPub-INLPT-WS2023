@@ -348,8 +348,8 @@ system for LM Prompting)\
 Mani Smaran Nair: Data extraction, Modular coding of the notebook,
 Frontend using flask\
 Maria Mathews: Question Answer Sets, Statistical Analysis of Data,
-Knowledge Graph Generation, Similar Document Retrieval(different
-embeddings)
+Knowledge Graph Generation, Relevant Information Retrieval(with different
+embeddings - for experiments), env Resolution
 
 # Confirmation of Own Work
 
