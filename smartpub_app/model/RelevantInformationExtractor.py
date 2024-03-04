@@ -1,3 +1,4 @@
+'''MAKE SURE YOU HAVE A PINECONE API KEY TO RUN THIS'''
 import numpy as np
 import torch
 import os
@@ -19,8 +20,8 @@ def setup():
         device = 'cpu'
         print("You are working on CPU. This may lead to long computation times.")
     # Initialize Pinecone client
-    #pinecone = Pinecone(api_key= os.environ.get('HF_AUTH'))
-    pinecone = Pinecone(api_key= "3c16547c-0c89-48d3-ac87-5ce64dfce92d")
+    pinecone = Pinecone(api_key= os.environ.get('HF_AUTH'))
+    #pinecone = Pinecone(api_key= "YOUR API KEY")
     # Specify the name of the existing index
     index_name = "smartpub"
     namespace= "assignment_embedding"
