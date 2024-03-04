@@ -53,5 +53,5 @@ open up localhost:
 
 ## Running the Model
 
-If the website is taking longer than usual to load, you can run the model using the notebook `smartpub_system.ipynb` located in the "smartpub_app/research" directory.
+If the website is taking longer than usual to load, you can run the model using the notebook `smartpub_system.ipynb` located in the "smartpub_app/research" directory, or run the locally .py file `run.py` located in the "smartpub_app/model/" which reads question and gives answer in the terminal.
 
