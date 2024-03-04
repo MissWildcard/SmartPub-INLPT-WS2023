@@ -6,7 +6,7 @@
 Clone the repository
 
 ```bash
-Project repo: https://github.com/
+Project repo: https://github.com/Maria-Mathews/SmartPub-INLPT-WS2023.git
 ```
 
 ### STEP 01- Navigate to the folder using the below command
