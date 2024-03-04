@@ -99,7 +99,7 @@ to the question (by comparing cosine similarity of their sentence embeddings).
 Detail can be seen in Figure 3.
 
 ![SmartPub Process](SmartPub.png)
-Figure 1: SmartPub Proces
+Figure 1: SmartPub Process
 
 ## Knowledge Graph
 
